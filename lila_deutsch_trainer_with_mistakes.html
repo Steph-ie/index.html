@@ -1,0 +1,795 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lila Deutsch Trainer (Rechtschreibung + Lesen)</title>
+  <style>
+    :root{
+      --bg:#1a1026;
+      --panel:#241236;
+      --panel2:#2d1644;
+      --ink:#f3eaff;
+      --muted:#cbb6e6;
+      --accent:#b16cff;
+      --accent2:#7c3aed;
+      --good:#38bdf8;
+      --warn:#fb7185;
+      --shadow: 0 12px 40px rgba(0,0,0,.35);
+      --radius: 18px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      background: radial-gradient(1200px 700px at 20% 10%, #3b1b66 0%, rgba(59,27,102,0) 60%),
+                  radial-gradient(900px 500px at 80% 20%, #2b0f55 0%, rgba(43,15,85,0) 60%),
+                  linear-gradient(160deg, var(--bg), #120a1b 60%, #0b0611);
+      color:var(--ink);
+      min-height:100vh;
+      padding:18px;
+    }
+    .wrap{max-width:1100px;margin:0 auto}
+    header{
+      display:flex;gap:14px;align-items:center;justify-content:space-between;
+      padding:18px 18px;
+      border-radius:var(--radius);
+      background:linear-gradient(135deg, rgba(177,108,255,.18), rgba(124,58,237,.10));
+      border:1px solid rgba(177,108,255,.22);
+      box-shadow: var(--shadow);
+      position:sticky;top:14px;backdrop-filter: blur(10px);
+    }
+    .brand{
+      display:flex;gap:12px;align-items:center;
+    }
+    .logo{
+      width:44px;height:44px;border-radius:14px;
+      background: conic-gradient(from 210deg, var(--accent), var(--accent2), #ff5bd6, var(--accent));
+      box-shadow: 0 10px 30px rgba(177,108,255,.35);
+      position:relative;
+    }
+    .logo:after{
+      content:"";
+      position:absolute;inset:10px;
+      border-radius:10px;
+      background:rgba(10,6,17,.55);
+      border:1px solid rgba(255,255,255,.08);
+    }
+    h1{margin:0;font-size:18px;letter-spacing:.2px}
+    .sub{margin:2px 0 0;color:var(--muted);font-size:12px}
+    .row{display:grid;grid-template-columns: 360px 1fr;gap:16px;margin-top:16px}
+    @media (max-width: 980px){
+      .row{grid-template-columns:1fr}
+      header{position:relative;top:0}
+    }
+    .card{
+      background:linear-gradient(180deg, rgba(36,18,54,.92), rgba(27,12,41,.92));
+      border:1px solid rgba(177,108,255,.18);
+      border-radius:var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .card h2{
+      margin:0 0 10px;font-size:14px;color:var(--muted);font-weight:650;letter-spacing:.3px;
+      text-transform:uppercase;
+    }
+    .controls{display:grid;gap:10px}
+    label{font-size:12px;color:var(--muted)}
+    select, input[type="text"], textarea{
+      width:100%;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      outline:none;
+      background:rgba(10,6,17,.55);
+      color:var(--ink);
+    }
+    textarea{min-height:90px;resize:vertical}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    button{
+      cursor:pointer;
+      border:none;
+      padding:10px 12px;
+      border-radius:14px;
+      color:var(--ink);
+      background:linear-gradient(135deg, rgba(177,108,255,.95), rgba(124,58,237,.85));
+      box-shadow: 0 12px 28px rgba(124,58,237,.25);
+      transition: transform .05s ease, filter .2s ease;
+      font-weight:650;
+    }
+    button.secondary{
+      background:rgba(255,255,255,.08);
+      box-shadow:none;
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--ink);
+    }
+    button:active{transform: translateY(1px)}
+    .pill{
+      display:inline-flex;align-items:center;gap:8px;
+      font-size:12px;color:var(--muted);
+      padding:8px 10px;border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      margin-right:8px;
+    }
+    .kpi{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    .kpi b{color:var(--ink)}
+    .main{
+      display:grid;gap:16px;
+    }
+    .modeTitle{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+    }
+    .modeTitle h3{margin:0;font-size:16px}
+    .hint{color:var(--muted);font-size:12px;line-height:1.35}
+    .box{
+      background:linear-gradient(180deg, rgba(45,22,68,.75), rgba(10,6,17,.35));
+      border:1px solid rgba(177,108,255,.18);
+      border-radius:var(--radius);
+      padding:14px;
+    }
+    .prompt{
+      font-family:var(--mono);
+      font-size:16px;
+      line-height:1.5;
+      padding:12px;
+      border-radius:14px;
+      background:rgba(0,0,0,.25);
+      border:1px dashed rgba(255,255,255,.16);
+      white-space:pre-wrap;
+      user-select:text;
+    }
+    .qa{
+      display:grid;gap:10px;margin-top:10px
+    }
+    .options{display:grid;gap:8px}
+    .opt{
+      padding:10px 12px;border-radius:14px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      cursor:pointer;
+    }
+    .opt:hover{filter:brightness(1.06)}
+    .opt.correct{border-color:rgba(56,189,248,.8);box-shadow:0 0 0 2px rgba(56,189,248,.15) inset}
+    .opt.wrong{border-color:rgba(251,113,133,.9);box-shadow:0 0 0 2px rgba(251,113,133,.12) inset}
+    .status{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.05);
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+    }
+    .status strong{color:var(--ink)}
+    .tiny{font-size:11px;color:var(--muted)}
+    .footer{margin-top:14px;color:rgba(203,182,230,.8);font-size:11px;line-height:1.35}
+    .toggle{
+      display:flex;gap:10px;flex-wrap:wrap;margin-top:10px
+    }
+    .chip{
+      padding:8px 10px;border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--ink);
+      cursor:pointer;
+      font-size:12px;
+    }
+    .chip.active{
+      background:linear-gradient(135deg, rgba(177,108,255,.35), rgba(124,58,237,.20));
+      border-color:rgba(177,108,255,.35);
+      box-shadow:0 0 0 2px rgba(177,108,255,.12) inset;
+    }
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo" aria-hidden="true"></div>
+      <div>
+        <h1>Lila Deutsch Trainer</h1>
+        <div class="sub">Rechtschreibung + Lesen, mit wählbarer Schwierigkeit. Offline, nur eine HTML-Datei.</div>
+      </div>
+    </div>
+    <div class="kpi" id="kpi">
+      <span class="pill">⭐ Punkte: <b id="score">0</b></span>
+      <span class="pill">✅ Richtig: <b id="right">0</b></span>
+      <span class="pill">❌ Falsch: <b id="wrong">0</b></span>
+    </div>
+  </header>
+
+  <div class="row">
+    <aside class="card">
+      <h2>Einstellungen</h2>
+      <div class="controls">
+        <div>
+          <label for="difficulty">Schwierigkeit</label>
+          <select id="difficulty">
+            <option value="A1">A1 (sehr leicht)</option>
+            <option value="A2">A2 (leicht)</option>
+            <option value="B1" selected>B1 (mittel)</option>
+            <option value="B2">B2 (schwer)</option>
+          </select>
+        </div>
+        <div>
+          <label for="mode">Modus</label>
+          <select id="mode">
+            <option value="mixed" selected>Mix (abwechselnd)</option>
+            <option value="spelling">Rechtschreibung</option>
+            <option value="reading">Leseverständnis</option>
+            <option value="cloze">Lückentext</option>
+          </select>
+        </div>
+        <div>
+          <label for="rounds">Runden pro Session</label>
+          <select id="rounds">
+            <option>5</option>
+            <option selected>10</option>
+            <option>15</option>
+            <option>20</option>
+          </select>
+        </div>
+        <div class="btns">
+          <button id="startBtn">Start</button>
+          <button class="secondary" id="resetBtn" title="Punkte zurücksetzen">Reset</button>
+        </div>
+        <div class="footer">
+          <div><b>Wie man übt:</b></div>
+          <ul>
+            <li><b>Rechtschreibung:</b> Tippe das Wort exakt (Umlaute zählen!).</li>
+            <li><b>Leseverständnis:</b> Lies den Text, wähle die beste Antwort.</li>
+            <li><b>Lückentext:</b> Fülle das fehlende Wort aus dem Kontext.</li>
+          </ul>
+          <div class="tiny">Tipp: Du kannst diese Datei auch auf GitHub Pages hochladen, um einen echten Web-Link zu haben.</div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="card">
+        <div class="modeTitle">
+          <h3 id="title">Bereit?</h3>
+          <div class="toggle" aria-label="Schnell-Modi">
+            <div class="chip active" data-quick="mixed">Mix</div>
+            <div class="chip" data-quick="spelling">Rechtschreibung</div>
+            <div class="chip" data-quick="reading">Lesen</div>
+            <div class="chip" data-quick="cloze">Lückentext</div>
+          </div>
+        </div>
+        <p class="hint" id="hint">Wähle Schwierigkeit und Modus, dann drücke <b>Start</b>. Viel Spaß im violetten Sprachlabor 🟣</p>
+      </section>
+
+      <section class="card box" id="gameBox" style="display:none">
+        <div class="prompt" id="prompt"></div>
+
+        <div class="qa" id="spellingBox" style="display:none">
+          <label for="answerInput">Deine Antwort</label>
+          <input id="answerInput" type="text" autocomplete="off" spellcheck="false" placeholder="Tippe hier…" />
+          <div class="btns">
+            <button id="submitBtn">Antwort prüfen</button>
+            <button class="secondary" id="skipBtn">Überspringen</button>
+          </div>
+        </div>
+
+        <div class="qa" id="readingBox" style="display:none">
+          <div class="options" id="options"></div>
+          <div class="btns">
+            <button class="secondary" id="nextBtn">Weiter</button>
+          </div>
+        </div>
+
+        <div class="status" id="status">Status…</div>
+      </section>
+
+
+      <section class="card box" id="mistakeBox">
+        <div class="modeTitle">
+          <h3>Fehlerliste</h3>
+          <div class="btns">
+            <button class="secondary" id="clearMistakesBtn" title="Liste leeren">Leeren</button>
+            <button class="secondary" id="practiceMistakesBtn" title="Nur falsche Fragen üben">Nur Fehler üben</button>
+          </div>
+        </div>
+        <p class="hint">Hier erscheinen Fragen, die du falsch hattest oder übersprungen hast. Klicke <b>Nochmal</b>, um sie sofort zu üben.</p>
+        <div class="status" id="mistakeSummary">Noch keine Fehler gespeichert.</div>
+        <div id="mistakeList" style="display:grid;gap:10px;margin-top:10px"></div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+/* ------------------------------ Data ------------------------------ */
+const BANK = {
+  A1: {
+    spelling: [
+      {word:"Haus", clue:"ein Gebäude, in dem Menschen wohnen"},
+      {word:"Wasser", clue:"man trinkt es"},
+      {word:"Schule", clue:"Ort zum Lernen"},
+      {word:"Freund", clue:"eine Person, die du magst"},
+      {word:"Buch", clue:"du liest es"},
+      {word:"Apfel", clue:"eine Frucht"},
+      {word:"Fenster", clue:"du kannst hindurch schauen"},
+      {word:"Tisch", clue:"Möbel zum Essen/Arbeiten"},
+      {word:"Straße", clue:"Weg für Autos"},
+      {word:"Mädchen", clue:"weibliches Kind"}
+    ],
+    reading: [
+      {
+        text:"Mia geht heute in die Schule. Sie hat ein blaues Heft und einen Stift. In der Pause isst sie einen Apfel.",
+        q:"Was isst Mia in der Pause?",
+        options:["Einen Apfel","Ein Brot","Eine Suppe","Eine Banane"],
+        a:0
+      },
+      {
+        text:"Tom trinkt Wasser. Danach spielt er im Park. Es ist sonnig und warm.",
+        q:"Wo spielt Tom?",
+        options:["Im Park","Im Kino","Im Haus","In der Schule"],
+        a:0
+      }
+    ],
+    cloze: [
+      {text:"Ich ___ ein Buch.", missing:"lese", options:["lese","esse","kaufe","male"]},
+      {text:"Wir gehen zur ___.", missing:"Schule", options:["Schule","Lampe","Wolke","Flasche"]}
+    ]
+  },
+  A2: {
+    spelling: [
+      {word:"Bibliothek", clue:"Ort mit vielen Büchern"},
+      {word:"Frühstück", clue:"Essen am Morgen"},
+      {word:"Uhrzeit", clue:"Was zeigt eine Uhr?"},
+      {word:"Abenteuer", clue:"spannende Reise oder Erfahrung"},
+      {word:"Geschichte", clue:"Erzählung über Ereignisse"},
+      {word:"Brücke", clue:"Verbindung über einen Fluss"},
+      {word:"Gefühl", clue:"Emotion, z.B. Freude"},
+      {word:"Nachrichten", clue:"Infos im Fernsehen/Internet"},
+      {word:"bequem", clue:"komfortabel"},
+      {word:"verstehen", clue:"begreifen"}
+    ],
+    reading: [
+      {
+        text:"Am Wochenende fährt Lina mit ihrer Mutter in die Stadt. Sie kaufen Brot und Käse. Danach besuchen sie eine kleine Ausstellung im Museum.",
+        q:"Wohin geht Lina nach dem Einkaufen?",
+        options:["Ins Museum","Zur Schule","Zum Bahnhof","In den Zoo"],
+        a:0
+      },
+      {
+        text:"Max lernt Deutsch, weil er später in der Schweiz studieren möchte. Jeden Tag liest er zehn Minuten und schreibt neue Wörter auf Karten.",
+        q:"Warum lernt Max Deutsch?",
+        options:["Er will später in der Schweiz studieren","Er hat keine Hausaufgaben","Er mag keine Bücher","Er will Arzt werden"],
+        a:0
+      }
+    ],
+    cloze: [
+      {text:"Heute ist es kalt, deshalb trage ich eine ___.", missing:"Jacke", options:["Jacke","Gabel","Kerze","Tasse"]},
+      {text:"Kannst du mir bitte den Weg __?", missing:"erklären", options:["erklären","verlieren","vergessen","verstecken"]}
+    ]
+  },
+  B1: {
+    spelling: [
+      {word:"Entscheidung", clue:"wenn man zwischen Optionen wählt"},
+      {word:"Wissenschaft", clue:"systematische Forschung"},
+      {word:"Zuverlässigkeit", clue:"wenn etwas gut vertrauenswürdig ist"},
+      {word:"Umweltverschmutzung", clue:"Schaden an Luft/Wasser/Boden"},
+      {word:"Herausforderung", clue:"eine schwierige Aufgabe"},
+      {word:"Beobachtung", clue:"genaues Anschauen/Analysieren"},
+      {word:"Voraussetzung", clue:"Bedingung, die vorher erfüllt sein muss"},
+      {word:"vermutlich", clue:"wahrscheinlich"},
+      {word:"außerdem", clue:"zusätzlich"},
+      {word:"tatsächlich", clue:"in Wirklichkeit"}
+    ],
+    reading: [
+      {
+        text:"Viele Jugendliche verbringen heute mehr Zeit online als früher. Das hat Vorteile: Man findet schnell Informationen und kann mit Freunden in Kontakt bleiben. Gleichzeitig wird es schwieriger, sich lange auf eine Aufgabe zu konzentrieren.",
+        q:"Was ist laut Text ein Problem?",
+        options:["Es ist schwieriger, sich lange zu konzentrieren","Man findet keine Informationen","Freunde sind offline","Jugendliche lesen nur Papierbücher"],
+        a:0
+      },
+      {
+        text:"In einer Stadt wurde eine neue Fahrradstraße gebaut. Seitdem fahren mehr Menschen mit dem Rad zur Arbeit. Die Luftqualität hat sich leicht verbessert, aber es gibt noch Diskussionen über Parkplätze.",
+        q:"Was hat sich verbessert?",
+        options:["Die Luftqualität","Die Anzahl der Parkplätze","Das Wetter","Die Preise im Supermarkt"],
+        a:0
+      }
+    ],
+    cloze: [
+      {text:"Obwohl es regnet, gehen wir ___ spazieren.", missing:"trotzdem", options:["trotzdem","niemals","kaum","sogar"]},
+      {text:"Die Ergebnisse sind wichtig, ___ wir daraus lernen können.", missing:"damit", options:["damit","während","gegen","ohne"]}
+    ]
+  },
+  B2: {
+    spelling: [
+      {word:"Wahrscheinlichkeit", clue:"Chance, dass etwas passiert"},
+      {word:"gesellschaftlich", clue:"die Gesellschaft betreffend"},
+      {word:"unterschiedlich", clue:"nicht gleich"},
+      {word:"Zugänglichkeit", clue:"wie leicht man etwas erreichen/nutzen kann"},
+      {word:"Verantwortungsbewusstsein", clue:"bewusstes Handeln für Folgen"},
+      {word:"Missverständnis", clue:"falsches Verstehen"},
+      {word:"unverzichtbar", clue:"sehr nötig, nicht ersetzbar"},
+      {word:"Gegenargument", clue:"Argument dagegen"},
+      {word:"zusammenhängend", clue:"logisch verbunden"},
+      {word:"dementsprechend", clue:"entsprechend der Situation"}
+    ],
+    reading: [
+      {
+        text:"Künstliche Intelligenz kann Texte schneller analysieren als Menschen und dadurch Forschung beschleunigen. Dennoch entstehen neue Risiken: Wer die Daten kontrolliert, beeinflusst möglicherweise Ergebnisse. Deshalb fordern viele Fachleute klare Regeln und Transparenz.",
+        q:"Warum fordern Fachleute Transparenz?",
+        options:["Weil Datenkontrolle Ergebnisse beeinflussen kann","Weil KI zu langsam ist","Weil Menschen keine Regeln mögen","Weil Texte nicht analysiert werden dürfen"],
+        a:0
+      },
+      {
+        text:"In Schulen wird diskutiert, ob Prüfungen weniger auswendig gelerntes Wissen abfragen sollten. Befürworter sagen, dass Problemlösen wichtiger ist. Kritiker befürchten jedoch, dass grundlegende Kenntnisse dann fehlen könnten.",
+        q:"Was befürchten Kritiker?",
+        options:["Dass grundlegende Kenntnisse fehlen könnten","Dass Problemlösen zu leicht wird","Dass es keine Diskussionen mehr gibt","Dass Prüfungen länger dauern"],
+        a:0
+      }
+    ],
+    cloze: [
+      {text:"Die Studie ist überzeugend, ___ die Methodik transparent dokumentiert wurde.", missing:"weil", options:["weil","obwohl","während","seit"]},
+      {text:"Er erklärte den Zusammenhang so, dass alle ihn ___ verstehen konnten.", missing:"sofort", options:["sofort","sowieso","abwärts","dagegen"]}
+    ]
+  }
+};
+
+/* ------------------------------ Helpers ------------------------------ */
+const $ = (id)=>document.getElementById(id);
+const state = {
+  running:false,
+  round:0,
+  maxRounds:10,
+  difficulty:"B1",
+  mode:"mixed",
+  current:null,  // {type, payload}
+  score:0,right:0,wrong:0,
+  mistakes:[],
+  practiceQueue:null,
+};
+
+function randPick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+function norm(s){
+  // normalize: trim, collapse spaces; keep umlauts/case sensitive? We'll do case-insensitive compare but preserve umlauts.
+  return (s ?? "").trim().replace(/\s+/g," ");
+}
+function setKPI(){
+  $("score").textContent = state.score;
+  $("right").textContent = state.right;
+  $("wrong").textContent = state.wrong;
+}
+function setStatus(html){
+  $("status").innerHTML = html;
+}
+
+function renderMistakes(){
+  const list = $("mistakeList");
+  const sum = $("mistakeSummary");
+  if(!list || !sum) return;
+
+  const m = state.mistakes;
+  if(!m.length){
+    sum.innerHTML = "Noch keine Fehler gespeichert.";
+    list.innerHTML = "";
+    return;
+  }
+  sum.innerHTML = `<strong>${m.length}</strong> gespeicherte Fehler. Tipp: Übe sie, bis sie langweilig werden 😉`;
+  list.innerHTML = "";
+  m.slice().reverse().forEach((it, revIdx)=>{
+    const idx = m.length - 1 - revIdx;
+    const wrap = document.createElement("div");
+    wrap.className = "opt";
+    wrap.style.cursor = "default";
+    wrap.innerHTML = `
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:center">
+        <div style="font-weight:700">${it.label}</div>
+        <button class="secondary" data-idx="${idx}" style="padding:6px 10px;border-radius:12px">Nochmal</button>
+      </div>
+      <div class="tiny" style="margin-top:8px;white-space:pre-wrap">${escapeHtml(it.question)}</div>
+      <div class="tiny" style="margin-top:8px"><b>Deine Antwort:</b> ${escapeHtml(it.userAnswer)}<br/><b>Richtig:</b> ${escapeHtml(it.correctAnswer)}</div>
+    `;
+    wrap.querySelector("button").addEventListener("click", (e)=>{
+      const i = parseInt(e.currentTarget.getAttribute("data-idx"),10);
+      loadMistakeQuestion(i);
+    });
+    list.appendChild(wrap);
+  });
+}
+
+function logMistake(entry){
+  state.mistakes.push(entry);
+  renderMistakes();
+}
+
+function loadMistakeQuestion(i){
+  const it = state.mistakes[i];
+  if(!it) return;
+  state.current = JSON.parse(JSON.stringify(it.payload));
+  $("prompt").textContent = `🟣 Fehler-Training\n\n` + state.current.prompt;
+  show(true);
+  showMode(state.current.type);
+  $("options").innerHTML = "";
+  $("answerInput").value = "";
+  setStatus(`Fehler-Training: <strong>Versuch's nochmal</strong>. (Diese Runde zählt nicht zu deiner Session.)`);
+
+  if(state.current.type==="reading"){
+    const options = state.current.options.map((txt, idx)=>({txt, idx}));
+    options.sort(()=>Math.random()-0.5);
+    state.current._shuffled = options;
+    const container = $("options");
+    options.forEach((o)=>{
+      const div = document.createElement("div");
+      div.className = "opt";
+      div.textContent = o.txt;
+      div.addEventListener("click", ()=> gradeReading(o.idx, div, true));
+      container.appendChild(div);
+    });
+  }else{
+    $("answerInput").focus();
+  }
+}
+function setTitle(t, h){
+  $("title").textContent = t;
+  $("hint").textContent = h;
+}
+function show(box){
+  $("gameBox").style.display = box ? "block" : "none";
+}
+function showMode(type){
+  $("spellingBox").style.display = (type==="spelling" || type==="cloze") ? "block" : "none";
+  $("readingBox").style.display = (type==="reading") ? "block" : "none";
+  if(type==="spelling"){
+    $("answerInput").placeholder = "Tippe das Wort…";
+  }else if(type==="cloze"){
+    $("answerInput").placeholder = "Tippe das fehlende Wort…";
+  }
+}
+
+/* ------------------------------ Question Builders ------------------------------ */
+function buildSpelling(d){
+  const item = randPick(BANK[d].spelling);
+  // Make it harder by masking letters depending on difficulty.
+  let w = item.word;
+  let maskRatio = ({A1:0.25,A2:0.35,B1:0.45,B2:0.55})[d] || 0.45;
+  // don't mask very short words too much
+  const letters = [...w];
+  const idxs = letters
+    .map((ch,i)=>({ch,i}))
+    .filter(o => /[A-Za-zÄÖÜäöüß]/.test(o.ch))
+    .map(o=>o.i);
+  const k = Math.max(1, Math.floor(idxs.length * maskRatio));
+  const shuffled = idxs.sort(()=>Math.random()-0.5);
+  const maskSet = new Set(shuffled.slice(0,k));
+  const masked = letters.map((ch,i)=> maskSet.has(i) ? "▢" : ch).join("");
+  const prompt = `🟣 Rechtschreibung\n\nHinweis: ${item.clue}\n\nWort (mit Lücken):\n${masked}\n\nTippe das vollständige Wort.`;
+  return {type:"spelling", answer:w, prompt, extra:{clue:item.clue, masked}};
+}
+
+function buildReading(d){
+  const item = randPick(BANK[d].reading);
+  const prompt = `🟣 Leseverständnis\n\nText:\n${item.text}\n\nFrage:\n${item.q}`;
+  return {type:"reading", prompt, options:item.options, answerIndex:item.a};
+}
+
+function buildCloze(d){
+  const item = randPick(BANK[d].cloze);
+  const prompt = `🟣 Lückentext\n\nSatz:\n${item.text.replace("___","▢▢▢")}\n\nTipp: Wähle ein Wort, das grammatisch und inhaltlich passt.\nOptionen: ${item.options.join(" · ")}`;
+  return {type:"cloze", prompt, answer:item.missing, options:item.options};
+}
+
+function nextType(){
+  const m = state.mode;
+  if(m === "spelling") return "spelling";
+  if(m === "reading") return "reading";
+  if(m === "cloze") return "cloze";
+  // mixed
+  const r = Math.random();
+  if(r < 0.42) return "spelling";
+  if(r < 0.76) return "reading";
+  return "cloze";
+}
+
+function buildQuestion(){
+  if(state.practiceQueue && state.practiceQueue.length){
+    const payload = state.practiceQueue.shift();
+    return JSON.parse(JSON.stringify(payload));
+  }
+  const d = state.difficulty;
+  const t = nextType();
+  if(t==="spelling") return buildSpelling(d);
+  if(t==="reading") return buildReading(d);
+  return buildCloze(d);
+}
+
+/* ------------------------------ Game Flow ------------------------------ */
+function start(){
+  state.running = true;
+  state.round = 0;
+  state.maxRounds = parseInt($("rounds").value,10);
+  state.difficulty = $("difficulty").value;
+  state.mode = $("mode").value;
+  setTitle("Session läuft", "Arbeite Runde für Runde. Du kannst jederzeit überspringen.");
+  show(true);
+  next();
+}
+
+function finish(){
+  state.running = false;
+  show(true);
+  $("spellingBox").style.display = "none";
+  $("readingBox").style.display = "none";
+  const acc = (state.right + state.wrong) ? Math.round(100*state.right/(state.right+state.wrong)) : 0;
+  $("prompt").textContent = `🟣 Fertig!\n\nDu hast ${state.maxRounds} Runden gespielt.\nGenauigkeit: ${acc}%\n\nTipps:\n• Wenn Rechtschreibung schwer ist: starte bei A2/B1 und spiel 5 Minuten täglich.\n• Für Lesen: markiere Schlüsselwörter (wer? was? warum?) im Kopf.`;
+  setStatus(`<strong>Ende.</strong> Punkte: ${state.score}. Richtig: ${state.right}. Falsch: ${state.wrong}.`);
+}
+
+function next(){
+  state.round += 1;
+  if(state.round > state.maxRounds){
+    finish();
+    return;
+  }
+  state.current = buildQuestion();
+  $("prompt").textContent = `Runde ${state.round}/${state.maxRounds}\n\n` + state.current.prompt;
+  showMode(state.current.type);
+  $("options").innerHTML = "";
+  $("answerInput").value = "";
+  $("answerInput").focus();
+  setStatus(`Bereit. <strong>${state.current.type==="reading"?"Wähle eine Option":"Tippe deine Antwort"}</strong>.`);
+
+  if(state.current.type==="reading"){
+    // shuffle options but keep correct index mapping
+    const options = state.current.options.map((txt, idx)=>({txt, idx}));
+    options.sort(()=>Math.random()-0.5);
+    state.current._shuffled = options;
+    const container = $("options");
+    options.forEach((o)=>{
+      const div = document.createElement("div");
+      div.className = "opt";
+      div.textContent = o.txt;
+      div.addEventListener("click", ()=> gradeReading(o.idx, div));
+      container.appendChild(div);
+    });
+  }
+}
+
+function addPoints(ok){
+  if(ok){
+    state.right += 1;
+    state.score += 10;
+  }else{
+    state.wrong += 1;
+    state.score = Math.max(0, state.score - 5);
+  }
+  setKPI();
+}
+
+function gradeSpelling(){
+  const cur = state.current;
+  const input = norm($("answerInput").value);
+  if(!input){
+    setStatus(`Bitte tippe etwas oder klicke <strong>Überspringen</strong>.`);
+    return;
+  }
+  // Compare case-insensitive but exact umlauts/spelling
+  const ok = input.localeCompare(cur.answer, "de", {sensitivity:"base"}) === 0;
+  addPoints(ok);
+  if(ok){
+    setStatus(`✅ Richtig! <strong>${cur.answer}</strong>`);
+  }else{
+    logMistake({
+      type: cur.type,
+      label: cur.type==="cloze" ? "Lückentext" : "Rechtschreibung",
+      question: cur.prompt,
+      userAnswer: input,
+      correctAnswer: cur.answer,
+      payload: cur
+    });
+    setStatus(`❌ Nicht ganz. Richtig wäre: <strong>${cur.answer}</strong>. Deine Antwort: <strong>${escapeHtml(input)}</strong>`);
+  }
+  // auto-next after short delay
+  setTimeout(next, 900);
+}
+
+function gradeReading(chosenIdx, chosenEl, isPractice=false){
+  const cur = state.current;
+  const correctIdx = cur.answerIndex;
+  // mark all options
+  [...document.querySelectorAll(".opt")].forEach(el=>el.style.pointerEvents="none");
+  const ok = chosenIdx === correctIdx;
+  addPoints(ok);
+  const shuffled = cur._shuffled || [];
+  shuffled.forEach((o, i)=>{
+    const el = $("options").children[i];
+    if(o.idx === correctIdx) el.classList.add("correct");
+    if(el === chosenEl && !ok) el.classList.add("wrong");
+  });
+  if(ok){
+    setStatus(`✅ Richtig.`);
+  }else{
+    if(!isPractice){
+      const correctText = cur.options[cur.answerIndex];
+      const chosenText = cur.options[chosenIdx] ?? "";
+      logMistake({
+        type: cur.type,
+        label: "Leseverständnis",
+        question: cur.prompt,
+        userAnswer: chosenText || "(keine)",
+        correctAnswer: correctText,
+        payload: cur
+      });
+    }
+    setStatus(`❌ Falsch. Richtige Antwort wurde markiert.`);
+  }
+}
+
+function skip(){
+  if(state.current){
+    const cur = state.current;
+    let correct = "";
+    if(cur.type==="reading"){
+      correct = cur.options[cur.answerIndex] || "";
+    }else{
+      correct = cur.answer || "";
+    }
+    logMistake({
+      type: cur.type,
+      label: cur.type==="reading" ? "Leseverständnis" : (cur.type==="cloze" ? "Lückentext" : "Rechtschreibung"),
+      question: cur.prompt,
+      userAnswer: "(übersprungen)",
+      correctAnswer: correct,
+      payload: cur
+    });
+  }
+  state.wrong += 1;
+  state.score = Math.max(0, state.score - 2);
+  setKPI();
+  setStatus(`Übersprungen. (-2 Punkte)`);
+  setTimeout(next, 400);
+}
+
+function resetAll(){
+  state.score=0;state.right=0;state.wrong=0;
+  setKPI();
+  setTitle("Bereit?", "Wähle Schwierigkeit und Modus, dann drücke Start. Viel Spaß im violetten Sprachlabor 🟣");
+  $("prompt").textContent = "🟣 Willkommen!\n\nDieser Trainer hat drei Systeme:\n1) Rechtschreibung\n2) Leseverständnis\n3) Lückentext\n\nWähle links deine Einstellungen und starte.";
+  $("gameBox").style.display = "block";
+  $("spellingBox").style.display = "none";
+  $("readingBox").style.display = "none";
+  setStatus("Punkte zurückgesetzt.");
+}
+
+function escapeHtml(str){
+  return (str||"").replace(/[&<>"']/g, m => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]));
+}
+
+/* ------------------------------ UI Wiring ------------------------------ */
+$("startBtn").addEventListener("click", start);
+$("resetBtn").addEventListener("click", resetAll);
+$("submitBtn").addEventListener("click", gradeSpelling);
+$("skipBtn").addEventListener("click", skip);
+$("nextBtn").addEventListener("click", next);
+$("answerInput").addEventListener("keydown", (e)=>{
+  if(e.key==="Enter"){
+    e.preventDefault();
+    if(state.current && (state.current.type==="spelling" || state.current.type==="cloze")) gradeSpelling();
+  }
+});
+
+// quick chips
+document.querySelectorAll(".chip").forEach(ch=>{
+  ch.addEventListener("click", ()=>{
+    document.querySelectorAll(".chip").forEach(x=>x.classList.remove("active"));
+    ch.classList.add("active");
+    const v = ch.getAttribute("data-quick");
+    $("mode").value = v;
+  });
+});
+
+// initial
+resetAll();
+</script>
+</body>
+</html>
